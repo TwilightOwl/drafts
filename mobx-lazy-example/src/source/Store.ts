@@ -1,4 +1,4 @@
-import { observable, action, createAtom } from 'mobx';
+import { observable, action, createAtom, computed } from 'mobx';
 
 import { request } from './Http';
 
@@ -29,6 +29,10 @@ class Store {
         console.log(this.atomB.reportObserved());
         return this._B
     }
+
+    // @computed get BC() {
+    //     return -this.B
+    // }
 
     // use as observable in React component
     get A() {

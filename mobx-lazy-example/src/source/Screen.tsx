@@ -34,6 +34,8 @@ class Screen extends React.Component {
                 observable data: {Store.data}
                 <br/>
                 Data A: {Store.A}
+                {/* <br/>
+                Data BC: {Store.BC} */}
                 <br/>
                 {this.state.useB && `Data B: ${Store.B}`}
                 <br/>
