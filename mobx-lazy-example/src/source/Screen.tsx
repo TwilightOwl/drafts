@@ -3,30 +3,56 @@ import { observer } from 'mobx-react';
 import Store from './Store';
 
 @observer
-export default class Screen extends React.Component {
+class BUsing extends React.Component {
+    render() {
+        console.log('* * * BUsing render')
+        return (
+            Store.B
+        )
+    }
+}
+
+@observer
+class Screen extends React.Component {
 
     state = {
-        useAtom2: false
+        useB: false
     }
 
-    onClick = () => {
-        //Store.retrieve();
-        //Store.obs();
-        // Store.atom2.reportObserved();
+    invalidateA = () => {
         Store.invalidateCache();
-        this.setState({ useAtom2: !this.state.useAtom2 })
+    }
+
+    toggleBUsing = () => {
+        this.setState({ useB: !this.state.useB })
     }
 
     render() {
-        console.log('render')
+        console.log('* * * Screen render')
         return (
             <div>
-                Data: {Store.value}<br/>
-                <button title='Press me' onClick={this.onClick} >PRESS ME !!!</button>
-                {/* {Store.obs()} */}
-                {this.state.useAtom2 ? `val: ${Store.v}` : ''}
+                observable data: {Store.data}
                 <br/>
+                Data A: {Store.A}
+                <br/>
+                {this.state.useB && `Data B: ${Store.B}`}
+                <br/>
+                <button onClick={this.invalidateA} >Invalidate A</button>
+                <br/>
+                <button onClick={this.toggleBUsing} >Toggle B using</button>
             </div>
+        )
+    }
+}
+
+export default class Comp extends React.Component {
+    render() {
+        console.log('* * * Comp render')
+        return(
+            <React.Fragment>
+                <Screen />
+                <BUsing />
+            </React.Fragment>
         )
     }
 }

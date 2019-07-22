@@ -3,55 +3,52 @@ import { observable, action, createAtom } from 'mobx';
 import { request } from './Http';
 
 class Store {
-    // @observable data: any;
 
+    @observable data: any;
+  
     // @action
     // retrieve = async () => {
     //     this.data = await request('url');
     // }
 
-
-    atom = createAtom("cache", undefined, 
-    () => this.unload()
+    atomA = createAtom("observable_A", undefined, 
+    //() => this.unload()
     );
 
-    atom2 = createAtom("cache2", undefined, 
-    () => this.unload()
+    atomB = createAtom("observable_B", undefined, 
+    //() => this.unload()
     );
 
     _cachedValue: any;
 
     retrieveValue = async (value: any) => await new Promise(r => setTimeout(() => r(value), 1000))
 
-    val: any = (console.log(this.atom.reportObserved()), 0);
+    _B: any = 0;
 
-    obs = () => {
-        console.log(this.atom2.reportObserved());
-    }
-
-    get v() {
-        console.log(this.atom2.reportObserved());
-        return this.val
+    get B() {
+        console.log(this.atomB.reportObserved());
+        return this._B
     }
 
     // use as observable in React component
-    get value() {
-        console.log(this.atom.reportObserved());
+    get A() {
+        console.log(this.atomA.reportObserved());
         //this.obs()
         if (!this._cachedValue) {
         // sync
         // this._cachedValue = "cached " + Math.random();
 
         setInterval(() => {
-            this.val = Math.random()
-            this.atom2.reportChanged();
+            this._B = Math.random()
+            this.atomB.reportChanged();
+            console.log('__ B has been changed')
         }, 500)
         
         // async
         this._cachedValue = "retrieving...";
         this.retrieveValue(Math.random()).then(action(v => {
             this._cachedValue = "cached " + v;
-            this.atom.reportChanged();
+            this.atomA.reportChanged();
         }))
         //this._cachedValue = "cached " + Math.random();
         }
@@ -69,7 +66,7 @@ class Store {
     @action
     invalidateCache = () => {
         this.unload();
-        this.atom.reportChanged();
+        this.atomA.reportChanged();
     };
 }
 
