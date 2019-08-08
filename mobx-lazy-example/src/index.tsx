@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 //import './index.css';
 //import App from './App';
 import * as serviceWorker from './serviceWorker';
-import Screen from './source/Screen';
+// import Screen from './source/Screen';
+import Screen from './toasts/ToastScreen';
 
 ReactDOM.render(<Screen />, document.getElementById('root'));
 
