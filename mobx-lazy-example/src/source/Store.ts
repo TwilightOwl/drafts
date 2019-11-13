@@ -4,7 +4,7 @@ import { request } from './Http';
 
 class Store {
 
-    @observable data: any;
+    //@observable data: any;
   
     // @action
     // retrieve = async () => {
@@ -12,11 +12,13 @@ class Store {
     // }
 
     atomA = createAtom("observable_A", undefined, 
-    //() => this.unload()
+        // если в какой-то момент у A не остается подписчиков, то запускается эта функция. не всегда нужно такое поведение
+        // () => this.unload()
+        () => alert('A')
     );
 
     atomB = createAtom("observable_B", undefined, 
-    //() => this.unload()
+        () => this.unload()
     );
 
     _cachedValue: any;
@@ -26,35 +28,38 @@ class Store {
     _B: any = 0;
 
     get B() {
-        console.log(this.atomB.reportObserved());
+        this.atomB.reportObserved()
         return this._B
     }
 
-    // @computed get BC() {
-    //     return -this.B
-    // }
+    @computed get AB() {
+        return this.B + this.A
+    }
 
     // use as observable in React component
     get A() {
         console.log(this.atomA.reportObserved());
         //this.obs()
         if (!this._cachedValue) {
-        // sync
-        // this._cachedValue = "cached " + Math.random();
+            // sync
+            // this._cachedValue = "cached " + Math.random();
 
-        setInterval(() => {
-            this._B = Math.random()
-            this.atomB.reportChanged();
-            console.log('__ B has been changed')
-        }, 500)
-        
-        // async
-        this._cachedValue = "retrieving...";
-        this.retrieveValue(Math.random()).then(action(v => {
-            this._cachedValue = "cached " + v;
-            this.atomA.reportChanged();
-        }))
-        //this._cachedValue = "cached " + Math.random();
+            setInterval(() => {
+                this._B = Math.random()
+                this.atomB.reportChanged();
+                console.log('__ B has been changed')
+            }, 500)
+            
+            // здесь не нужно вызывать reportChanged, т.к. в синхронной функции меняем значение _cachedValue и новое же возвращаем из геттера
+            this._cachedValue = "retrieving...";
+            // async
+            this.retrieveValue(Math.random()).then(action(v => {
+                this._cachedValue = "cached " + v;
+                // reportChanged нужен только когда асинхронно собираемся поменять _cachedValue
+                // вызываем у atomA поскольку мы привзяали atomA к геттеру для A вызовом reportObserved - геттер вызвался значит кто-то использует A - сообщим это mobx'у
+                this.atomA.reportChanged();
+            }))
+            //this._cachedValue = "cached " + Math.random();
         }
         return this._cachedValue;
     }
