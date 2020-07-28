@@ -4,6 +4,13 @@ import { request } from './Http';
 
 class Store {
 
+    constructor() {
+        this.method = this.method.bind(this);
+        //debugger;
+    }
+
+    method(){}
+
     //@observable data: any;
   
     // @action

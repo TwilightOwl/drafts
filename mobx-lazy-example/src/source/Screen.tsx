@@ -34,7 +34,7 @@ class Screen extends React.Component {
     }
 
     render() {
-        console.log('* * * Screen render')
+        console.log('* * * Screen render', Usage.expField)
         return (
             <div>
                 {/* observable data: {Store.data} */}

@@ -13,8 +13,8 @@ g1(3)
 g2(3,'a')
 
 // ts errors as expected :)
-g2(3, 4)
-g2('a', 4)
-g2('a', 4, 4)
+// g2(3, 4)
+// g2('a', 4)
+// g2('a', 4, 4)
 
 export default wrapper;
